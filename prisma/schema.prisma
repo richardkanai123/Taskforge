@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  fullname  String
+  username  String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Projects  Projects[]
+  role      Role       @default(MEMBER)
+  Tasks     Tasks[]
+
+  Comments Comments[]
+}
+
+enum Role {
+  ADMIN
+  LEAD
+  MEMBER
+  CUSTOMER
+}
+
+enum PROJECT_STATUS {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Projects {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  status      PROJECT_STATUS @default(OPEN)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        Users          @relation(fields: [lead], references: [id])
+  lead        String
+  Customer    Customers?     @relation(fields: [customerId], references: [id])
+  customerId  String?
+  Tasks       Tasks[]
+}
+
+model Customers {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  phone     String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  projects  Projects[]
+}
+
+model Tasks {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  project     Projects   @relation(fields: [projectId], references: [id])
+  projectId   String
+  user        Users      @relation(fields: [owner], references: [id])
+  owner       String
+  status      String     @default("open")
+  dueDate     DateTime
+  priority    String
+  progress    Int        @default(0) // 0-100
+  comments    Comments[]
+}
+
+model Comments {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  task      Tasks    @relation(fields: [taskId], references: [id])
+  taskId    String
+  writer    Users    @relation(fields: [writerId], references: [id])
+  writerId  String
+}
