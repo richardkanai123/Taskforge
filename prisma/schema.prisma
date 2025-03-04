@@ -14,18 +14,19 @@ datasource db {
 }
 
 model Users {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  fullname  String
-  username  String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Projects  Projects[]
-  role      Role       @default(MEMBER)
-  Tasks     Tasks[]
-
-  Comments Comments[]
+  id              String     @id @default(cuid())
+  email           String     @unique
+  fullname        String
+  username        String     @unique
+  password        String
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  ProjectsCreated Projects[] @relation("CreatedProjects")
+  ProjectsLead    Projects[] @relation("LeadProjects")
+  role            Role       @default(MEMBER)
+  Tasks           Tasks[]
+  Comments        Comments[]
+  Projects        Projects[]
 }
 
 enum Role {
@@ -48,11 +49,21 @@ model Projects {
   status      PROJECT_STATUS @default(OPEN)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  user        Users          @relation(fields: [lead], references: [id])
-  lead        String
-  Customer    Customers?     @relation(fields: [customerId], references: [id])
-  customerId  String?
-  Tasks       Tasks[]
+  dueDate     DateTime
+
+  // The user who created the project (cannot be changed)
+  creator   Users  @relation("CreatedProjects", fields: [creatorId], references: [id])
+  creatorId String
+
+  // The lead assigned to the project (can be changed)
+  lead   Users?  @relation("LeadProjects", fields: [leadId], references: [id])
+  leadId String?
+
+  Customer   Customers? @relation(fields: [customerId], references: [id])
+  customerId String?
+  Tasks      Tasks[]
+  Users      Users?     @relation(fields: [usersId], references: [id])
+  usersId    String?
 }
 
 model Customers {
@@ -65,20 +76,34 @@ model Customers {
   projects  Projects[]
 }
 
+enum TASK_STATUS {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum PRIORITY {
+  L1
+  L2
+  L3
+  L4
+  L5
+}
+
 model Tasks {
-  id          String     @id @default(cuid())
+  id          String      @id @default(cuid())
   title       String
   description String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  project     Projects   @relation(fields: [projectId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  project     Projects    @relation(fields: [projectId], references: [id])
   projectId   String
-  user        Users      @relation(fields: [owner], references: [id])
+  user        Users       @relation(fields: [owner], references: [id])
   owner       String
-  status      String     @default("open")
+  status      TASK_STATUS @default(OPEN)
   dueDate     DateTime
-  priority    String
-  progress    Int        @default(0) // 0-100
+  priority    PRIORITY    @default(L1)
+  progress    Int         @default(0) // 0-100
   comments    Comments[]
 }
 
