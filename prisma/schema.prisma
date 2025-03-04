@@ -62,8 +62,9 @@ model Projects {
   Customer   Customers? @relation(fields: [customerId], references: [id])
   customerId String?
   Tasks      Tasks[]
-  Users      Users?     @relation(fields: [usersId], references: [id])
-  usersId    String?
+
+  Users   Users?  @relation(fields: [usersId], references: [id])
+  usersId String?
 }
 
 model Customers {
