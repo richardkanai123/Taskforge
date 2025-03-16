@@ -6,27 +6,35 @@ export const auth = betterAuth({
     secret: process.env.NEXTAUTH_SECRET,
     appName: "TaskForge",
     baseURL: process.env.BASE_URL,
-   database: prismaAdapter(prisma, {
-       provider: "postgresql",
-   }),
+    database: prismaAdapter(prisma, {
+        provider: "postgresql",
+    }),
+    advanced: {
+        generateId: () => crypto.randomUUID()
+    },
+    user: {
+        additionalFields: {
+            role: {
+                type: 'string',
+                defaultValue: 'MEMBER',
+                input: false,
+            },
+            username: {
+                type: 'string',
+                required: true,
+                input: true,
+            },
+        }, 
+    },
     emailAndPassword: {
         enabled: true,
         minPasswordLength: 6,
         maxPasswordLength: 20,
-        autoSignIn: true
-    },
-    user: {
-        modelName: "users",
-        emailField: "email",
-        passwordField: "password",
-        roleField: "role",
-        usernameField: "username",
-        fullnameField: "fullname",
-        createdAtField: "createdAt", 
+        // autoSignIn: true
     },
 
     
     plugins: [
-    nextCookies()
-]
+        nextCookies()
+    ]
 })

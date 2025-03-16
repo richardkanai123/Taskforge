@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 const saltRoundsString = process.env.SALT_ROUNDS || "10";
 const saltRounds = parseInt(saltRoundsString);
 export async function GET() {
-	const users = await prisma.users.findMany();
+	const users = await prisma.user.findMany();
 
 	if (!users || users.length === 0) {
 		return NextResponse.json({ message: "No users found" }, { status: 404 });
@@ -20,10 +20,6 @@ export async function GET() {
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
-
-		console.log(body);
-		// validate the request body
-
 		const isValid = NewUserSchema.safeParse(body);
 		if (!isValid.success) {
 			return NextResponse.json(
@@ -34,7 +30,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// check if user email already exists
-		const userExists = await prisma.users.findFirst({
+		const userExists = await prisma.user.findFirst({
 			where: {
 				email: body.email,
 			},
@@ -58,7 +54,7 @@ export async function POST(request: NextRequest) {
 			role: isValid.data.role,
 		};
 
-		const user = await prisma.users.create({
+		const user = await prisma.user.create({
 			data: newUserData,
 		});
 

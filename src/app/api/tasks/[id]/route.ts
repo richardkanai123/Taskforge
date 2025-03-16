@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const { id } =await params;
     try {
-        const task = await prisma.tasks.findUnique({
+        const task = await prisma.task.findUnique({
             where: {
                 id: id,
             },
@@ -52,7 +52,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
 
         // check if task exists
-        const taskExists = await prisma.tasks.findUnique({
+        const taskExists = await prisma.task.findUnique({
             where: {
                 id: id,
             },
@@ -86,10 +86,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
             return NextResponse.json({ message: "Task does not belong to the project!" }, { status: 404 });
         }
 
-        // check the owner of the task
-        if (taskExists.owner !== owner || taskExists.project.creatorId !== owner || taskExists.project.leadId !== owner) {
-            return NextResponse.json({ message: "You are not authorized to update this task!" }, { status: 401 });
-        }
+        // // check the owner of the task
+        // if (taskExists. !== owner || taskExists.project.creatorId !== owner || taskExists.project.leadId !== owner) {
+        //     return NextResponse.json({ message: "You are not authorized to update this task!" }, { status: 401 });
+        // }
 
         // update the task
         const task = await prisma.tasks.update({
