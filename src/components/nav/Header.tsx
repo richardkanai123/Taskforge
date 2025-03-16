@@ -1,6 +1,6 @@
-import UserButton from "@/components/nav/UserButton"
 import Link from "next/link"
 import { ModeToggle } from "./mode-toggler"
+import LoginBtn from "../Buttons/Login"
 
 export function Header() {
     return (
@@ -14,7 +14,7 @@ export function Header() {
                 <div className="flex ml-auto items-center justify-between space-x-2 md:justify-end">
                     <nav className="flex items-center space-x-2">
                         <ModeToggle />
-                        <UserButton />
+                        <LoginBtn />
                     </nav>
                 </div>
             </div>

@@ -11,6 +11,7 @@ const LoginBtn = () => {
 
         return (
             <Button
+                variant='destructive'
                 disabled={isPending}
                 size='lg'
                 onClick={async () => {
@@ -20,10 +21,9 @@ const LoginBtn = () => {
                         console.log(error)
                     }
                 }}
-                variant='default'
-                className='mx-auto bg-primary text-white'
+                className='mx-auto text-white'
             >
-                {isPending ? "Loading..." : `Logout ${data.user.name}`}
+                {isPending ? "Loading..." : ` ${data.user.name} Logout`}
             </Button>
         )
     }

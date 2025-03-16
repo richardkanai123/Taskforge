@@ -1,3 +1,4 @@
+import HomepageCTA from "@/components/Buttons/HomepageCTA";
 import Image from "next/image";
 
 export default function Home() {
@@ -12,9 +13,7 @@ export default function Home() {
           Streamline your workflow and boost team productivity with our powerful task management solution.
         </p>
         <div className="mt-8 flex gap-4 justify-center">
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition w-fit">
-            Get Started Free
-          </button>
+          <HomepageCTA />
           <button className="bg-white text-gray-600 dark:text-gray-400 px-8 py-3 rounded-lg hover:bg-gray-100 dark:bg-gray-800 transition w-fit">
             Learn More
           </button>
