@@ -24,7 +24,20 @@ export async function POST(req: NextRequest) {
 		return Response.json({ success: true, user, token }, { status: 201 });
 	} catch (error) {
 		console.error("Sign-up error:", error);
+		// Check specifically for "User already exists" error
 		if (error instanceof ApiError || error instanceof BetterAuthError) {
+			if (error.message?.includes("User already exists")) {
+				return Response.json(
+					{ 
+						success: false, 
+						error: "A user with this email already exists", 
+						cause: "Duplicate Email" 
+					},
+					{ status: 422 }
+				);
+			}
+			
+			// Handle other API errors with 409 status
 			return Response.json(
 				{ success: false, error: error.message, cause: error.cause },
 				{ status: 409 }
