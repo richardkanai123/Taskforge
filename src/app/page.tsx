@@ -92,9 +92,9 @@ export default function Home() {
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Set up in minutes. No credit card required. Start managing your tasks more efficiently today.
           </p>
-          <button className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
-            Start Free Trial
-          </button>
+          <a href="/sign-in" className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+            Get Started
+          </a>
         </div>
       </div>
 

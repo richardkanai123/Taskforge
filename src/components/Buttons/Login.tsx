@@ -2,13 +2,15 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { authClient } from '@/lib/auth-client'
+import Image from 'next/image'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 const LoginBtn = () => {
     const { data, isPending } = authClient.useSession()
-
+    const Router = useRouter()
 
     if (data) {
-
         return (
             <Button
                 variant='destructive'
@@ -17,36 +19,35 @@ const LoginBtn = () => {
                 onClick={async () => {
                     try {
                         await authClient.signOut()
+                        toast.success(`See you later`, {
+                            icon: '👋'
+                        })
+                        Router.push("/")
                     } catch (error) {
-                        console.log(error)
+                        if (error instanceof Error) {
+                            toast.error(error.message)
+                            return
+                        }
+
+                        toast.error("Something went wrong")
+                        return
                     }
                 }}
                 className='mx-auto text-white'
             >
-                {isPending ? "Loading..." : ` ${data.user.name} Logout`}
+                <Image src={data.user.image || `https://ui-avatars.com/api/?name=${data.user.name}`} alt="Logout" className='rounded-full' width={24} height={24} />
+                Logout
             </Button>
         )
     }
-    return (
 
+
+    return (
         <Button
             disabled={isPending}
             size='lg'
             onClick={async () => {
-                try {
-                    const { data, error } = await authClient.signIn.email({
-                        email: "exampleone@example.com",
-                        password: "12345678",
-                    })
-
-                    if (error) {
-                        console.log(error)
-                        return
-                    }
-                    console.log(data)
-                } catch (error) {
-                    console.log(error)
-                }
+                Router.push("/sign-in")
             }}
             variant='default'
             className='mx-auto bg-primary text-white'

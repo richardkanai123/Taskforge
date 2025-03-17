@@ -30,7 +30,7 @@ export const auth = betterAuth({
         enabled: true,
         minPasswordLength: 6,
         maxPasswordLength: 20,
-        // autoSignIn: true
+        autoSignIn: true
     },
 
     

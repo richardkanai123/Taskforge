@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/nav/Header";
 import { ThemeProvider } from "@/lib/theme-provider";
+import { Toaster } from 'react-hot-toast';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -55,7 +57,21 @@ export default function RootLayout({
               </div>
             </div>
           </footer>
-        </ThemeProvider>
+          <Toaster toastOptions={
+            {
+              iconTheme: {
+                primary: '#fff',
+                secondary: '#072059',
+              },
+              style: {
+                borderRadius: '10px',
+                background: '#14014f',
+                color: '#fff',
+              },
+              className: 'bg-primary text-white',
+            }
+          } />
+        </ThemeProvider >
       </body>
     </html>
   );
