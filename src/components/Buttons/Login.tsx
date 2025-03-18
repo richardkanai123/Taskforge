@@ -22,7 +22,7 @@ const LoginBtn = () => {
                         toast.success(`See you later`, {
                             icon: '👋'
                         })
-                        Router.push("/")
+                        Router.replace("/")
                     } catch (error) {
                         if (error instanceof Error) {
                             toast.error(error.message)
