@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Define animations -->
+  <defs>
+    <style>
+      @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+      }
+      @keyframes progress {
+        0% { stroke-dashoffset: 100; }
+        100% { stroke-dashoffset: 0; }
+      }
+      .spinner {
+        transform-origin: center;
+        animation: rotate 2s linear infinite;
+      }
+      .pulse {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      .progress {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: progress 3s linear infinite;
+      }
+    </style>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="150" cy="100" r="70" fill="#f5f5f5" />
+  
+  <!-- Outer spinning ring -->
+  <circle cx="150" cy="100" r="70" fill="none" stroke="#2D3748" stroke-width="6" class="spinner" />
+  
+  <!-- Inner spinner elements -->
+  <g class="spinner">
+    <!-- Anvil shape (simplified) -->
+    <path d="M120,90 L180,90 C190,90 195,100 195,110 L195,130 C195,135 190,140 185,140 L115,140 C110,140 105,135 105,130 L105,110 C105,100 110,90 120,90 Z" fill="#4A5568" class="pulse" />
+    
+    <!-- Hammer (simplified) -->
+    <rect x="145" y="50" width="10" height="45" fill="#805AD5" transform="rotate(-15, 150, 50)" />
+    <rect x="135" y="45" width="30" height="15" rx="2" ry="2" fill="#553C9A" transform="rotate(-15, 150, 50)" />
+  </g>
+  
+  <!-- Progress checkmark -->
+  <path d="M135,110 L145,125 L165,95" stroke="#68D391" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" class="progress" />
+  
+  <!-- Text -->
+  <text x="150" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2D3748">Loading...</text>
+</svg>

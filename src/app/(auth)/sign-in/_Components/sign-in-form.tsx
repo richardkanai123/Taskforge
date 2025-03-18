@@ -148,13 +148,24 @@ const SignInForm = () => {
                 </form>
             </Form>
 
+
+
             <div className="p-6 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-center text-sm text-gray-500">
-                    Don&apos;t have an account?
-                    <Link href="/sign-up" className="ml-4 text-blue-600 hover:underline">
-                        Sign Up
-                    </Link>
-                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500">
+                    <p className="text-center">
+                        Don&apos;t have an account?
+                        <Link href="/sign-up" className="ml-2 text-blue-600 hover:underline">
+                            Sign Up
+                        </Link>
+                    </p>
+                    <span className="hidden sm:inline text-gray-300">|</span>
+                    <p className="text-center">
+                        Forgot your password?
+                        <Link href={`/reset-password?email=${form.getValues('email')}`} className="ml-2 text-blue-600 hover:underline">
+                            Reset Password
+                        </Link>
+                    </p>
+                </div>
             </div>
 
         </div>

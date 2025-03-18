@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Background -->
+  <rect width="300" height="200" fill="#f5f5f5" rx="10" ry="10" />
+  
+  <!-- Anvil base -->
+  <polygon points="130,140 170,140 190,160 110,160" fill="#2D3748" />
+  
+  <!-- Anvil top -->
+  <path d="M120,90 L180,90 C190,90 195,100 195,110 L195,130 C195,135 190,140 185,140 L115,140 C110,140 105,135 105,130 L105,110 C105,100 110,90 120,90 Z" fill="#4A5568" />
+  
+  <!-- Hammer -->
+  <rect x="145" y="50" width="10" height="50" fill="#805AD5" transform="rotate(-15, 150, 50)" />
+  <rect x="135" y="45" width="30" height="15" rx="2" ry="2" fill="#553C9A" transform="rotate(-15, 150, 50)" />
+  
+  <!-- Checkmark -->
+  <path d="M135,110 L145,125 L165,95" stroke="#68D391" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Text -->
+  <text x="150" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2D3748">TaskForge</text>
+</svg>
