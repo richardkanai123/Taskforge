@@ -40,10 +40,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+
           <Header />
+          {/* <SidebarProvider> */}
+
           {children}
           {/* Footer */}
-          <Footer />
           <Toaster toastOptions={
             {
               iconTheme: {
@@ -58,6 +60,8 @@ export default function RootLayout({
               className: 'bg-primary text-white',
             }
           } />
+          {/* </SidebarProvider> */}
+          <Footer />
         </ThemeProvider >
       </body>
     </html>
