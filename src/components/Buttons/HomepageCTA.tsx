@@ -12,16 +12,25 @@ const HomepageCTA = async () => {
 
     if (!session) {
         return (
-            <Button asChild variant='default' size='lg'>
-                <Link className='' href="/sign-in">Get Started</Link>
+            <Button
+                asChild
+                variant='default'
+                size='lg'
+                className="w-full" // Make button fill container
+            >
+                <Link href="/sign-in">Get Started</Link>
             </Button>
         )
     }
 
-
     return (
-        <Button asChild variant='default' size='lg'>
-            <Link className='' href="/dashboard">View DashBoard</Link>
+        <Button
+            asChild
+            variant='default'
+            size='lg'
+            className="w-full" // Make button fill container
+        >
+            <Link href="/dashboard">View Dashboard</Link>
         </Button>
     )
 }

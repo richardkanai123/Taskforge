@@ -9,7 +9,7 @@ export function Header() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3">
             <div className="container flex h-14 items-center">
                 <div className="mr-4 flex">
-                    <Link href="/" className="mr-6 flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                    <Link href="/" className="mr-6 flex flex-col items-center space-x-2 hover:opacity-80 transition-opacity">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 300 200"
@@ -54,10 +54,10 @@ export function Header() {
                     </Link>
                 </div>
                 <div className="flex ml-auto items-center justify-between space-x-2 md:justify-end">
-                    <nav className="flex items-center space-x-4">
+                    <div className="relative flex items-center space-x-4">
                         <ModeToggle />
                         <LoginBtn />
-                    </nav>
+                    </div>
                 </div>
             </div>
         </header>
