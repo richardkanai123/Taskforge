@@ -1,15 +1,16 @@
 import { prisma } from "@/lib/Prisma";
 import { NewTaskSchema } from "@/lib/schemas/task";
+import { Params } from "next/dist/server/request/params";
 import { NextRequest, NextResponse } from "next/server";
 
 // get task by id
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Params }) {
 
     const { id } =await params;
     try {
         const task = await prisma.task.findUnique({
             where: {
-                id: id,
+            id: id as string,
             },
             include: {
                 assignedTo: {
@@ -36,7 +37,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 
 // update project by id
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Params }) {
     const { id } =await params;
     
     // validate request body
@@ -54,7 +55,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         // check if task exists
         const taskExists = await prisma.task.findUnique({
             where: {
-                id: id,
+                id: id as string,
             },
             include: {
                 project: {
@@ -94,7 +95,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         // update the task
         const task = await prisma.task.update({
             where: {
-                id: id,
+                id: id as string,
             },
             data: {
                 title,

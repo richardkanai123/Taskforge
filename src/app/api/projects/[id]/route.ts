@@ -1,15 +1,16 @@
 import { ProjectSchema } from "@/lib/Constants";
 import { prisma } from "@/lib/Prisma";
+import { Params } from "next/dist/server/request/params";
 import { NextRequest, NextResponse } from "next/server";
 
 // get project by id
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Params }) {
 
     const { id } =await params;
     try {
         const ProjectData = await prisma.project.findUnique({
             where: {
-                id: id,
+                id: id as string,
             },
         });
 
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 
 // update project by id
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Params }) {
 
     const { id } = await params;
     
@@ -49,7 +50,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         //   check if project exists
         const projectExists = await prisma.project.findUnique({
             where: {
-                id: id,
+                id: id as string,
             },
         });
 
