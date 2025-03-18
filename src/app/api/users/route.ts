@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 		const newUserData = {
 			email: isValid.data.email,
 			password: hashedPassword,
-			fullname: isValid.data.fullname,
+			name: isValid.data.name,
 			username: isValid.data.username,
 			role: isValid.data.role,
 		};

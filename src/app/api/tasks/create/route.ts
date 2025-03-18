@@ -20,12 +20,12 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const newTask = await prisma.tasks.create({
+    const newTask = await prisma.task.create({
         data: {
             title: isValidTaskData.data.title,
             description: isValidTaskData.data.description,
             projectId: isValidTaskData.data.projectId,
-            owner: isValidTaskData.data.owner,
+            assignedId: isValidTaskData.data.owner,
             status: isValidTaskData.data.status,
             dueDate: isValidTaskData.data.dueDate,
             priority: isValidTaskData.data.priority,

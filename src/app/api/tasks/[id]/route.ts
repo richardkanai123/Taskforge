@@ -12,7 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 id: id,
             },
             include: {
-                user: {
+                assignedTo: {
                     select: {
                         username: true,
                         email: true,
@@ -48,7 +48,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         return NextResponse.json({ message: isValid.error.errors }, { status: 400 });
     }
     
-    const { title, description, status, priority, progress, dueDate, owner, projectId } = isValid.data;
+    const { title, description, status, priority, progress, dueDate, projectId } = isValid.data;
 
 
         // check if task exists
@@ -92,7 +92,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         // }
 
         // update the task
-        const task = await prisma.tasks.update({
+        const task = await prisma.task.update({
             where: {
                 id: id,
             },

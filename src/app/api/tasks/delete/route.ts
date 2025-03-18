@@ -7,7 +7,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     const { id } =await params;
     try {
-        const task = await prisma.tasks.delete({
+        const task = await prisma.task.delete({
             where: {
                 id: id,
             }

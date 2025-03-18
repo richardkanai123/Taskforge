@@ -5,7 +5,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const { id } =await params;
     try {
-        const ProjectData = await prisma.projects.findUnique({
+        const ProjectData = await prisma.project.findUnique({
             where: {
                 id: id,
             },

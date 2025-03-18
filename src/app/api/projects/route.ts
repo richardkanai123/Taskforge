@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const projects = await prisma.projects.findMany();
+        const projects = await prisma.project.findMany();
         if (!projects || projects.length === 0) {
             return NextResponse.json({ message: "No projects found" }, {status: 404});
         }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const newProject = await prisma.projects.create({
+        const newProject = await prisma.project.create({
             data: {
                 title: isValidProjectData.data.title,
                 description: isValidProjectData.data.description,

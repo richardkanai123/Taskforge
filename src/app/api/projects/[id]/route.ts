@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const { id } =await params;
     try {
-        const ProjectData = await prisma.projects.findUnique({
+        const ProjectData = await prisma.project.findUnique({
             where: {
                 id: id,
             },
@@ -47,7 +47,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         }
 
         //   check if project exists
-        const projectExists = await prisma.projects.findUnique({
+        const projectExists = await prisma.project.findUnique({
             where: {
                 id: id,
             },
