@@ -35,7 +35,7 @@ export default async function ProfilePage() {
     const { user } = session
     return (
         <div className="w-full h-full flex-1 mx-auto py-10">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden px-3">
                 {/* Header with cover image */}
                 <div className="h-32 bg-gradient-to-r from-blue-600 to-purple-600"></div>
 
