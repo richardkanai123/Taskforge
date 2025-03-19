@@ -4,6 +4,7 @@ import Image from "next/image"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { User, LogIn, Mail, AtSign, Calendar, Activity, CheckCircle2, Clock, Star } from "lucide-react"
+import SignOutBtn from "@/components/Buttons/SignOutBtn"
 export default async function ProfilePage() {
     const session = await auth.api.getSession({
         headers: await headers()
@@ -123,6 +124,8 @@ export default async function ProfilePage() {
                                     Edit Profile
                                 </Button>
                             </Link>
+
+                            <SignOutBtn />
                         </div>
 
                     </div>
