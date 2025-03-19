@@ -34,8 +34,8 @@ export default async function ProfilePage() {
 
     const { user } = session
     return (
-        <div className="w-full h-full flex-1 mx-auto py-10">
-            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden px-3">
+        <div className="w-full h-full flex-1 mx-auto py-10 px-4 ">
+            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden ">
                 {/* Header with cover image */}
                 <div className="h-32 bg-gradient-to-r from-blue-600 to-purple-600"></div>
 
@@ -83,25 +83,21 @@ export default async function ProfilePage() {
                                     </p>
                                 </div>
                             </div>
-                            <Link href="/profile/edit">
-                                <Button variant="outline" className="border-gray-200 dark:border-gray-700">
-                                    Edit Profile
-                                </Button>
-                            </Link>
+
                         </div>
 
                         {/* Stats */}
-                        <div className="mt-6 grid grid-cols-3 gap-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <div className="w-full mt-6 grid grid-cols-3 gap-6 border-t border-gray-200 dark:border-gray-700 pt-6">
                             <div className="text-center">
-                                <span className="block text-2xl font-bold text-gray-900 dark:text-white">0</span>
+                                <span className="block text-xl font-bold text-gray-900 dark:text-white">0</span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Projects</span>
                             </div>
                             <div className="text-center">
-                                <span className="block text-2xl font-bold text-gray-900 dark:text-white">0</span>
+                                <span className="block text-xl font-bold text-gray-900 dark:text-white">0</span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Tasks</span>
                             </div>
                             <div className="text-center">
-                                <span className="block text-2xl font-bold text-gray-900 dark:text-white">
+                                <span className="block text-xl font-bold text-gray-900 dark:text-white">
                                     {session.role}
                                 </span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Role</span>
@@ -115,10 +111,16 @@ export default async function ProfilePage() {
                         </div>
 
                         {/* Link to dashboard */}
-                        <div className="mt-6">
-                            <Link href="/dashboard">
-                                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                                    Go to Dashboard
+                        <div className="mt-6 w-full flex flex-wrap gap-4 align-middle items justify-between p-4 rounded-lg">
+                            <Link className="w-fit" href="/dashboard">
+                                <Button size='lg' className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                                    View Dashboard
+                                </Button>
+                            </Link>
+
+                            <Link className="w-fit" href="/profile/edit">
+                                <Button size='lg' variant="outline" className="border-gray-200 dark:border-gray-700">
+                                    Edit Profile
                                 </Button>
                             </Link>
                         </div>
