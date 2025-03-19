@@ -13,7 +13,7 @@ import {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
 
-    <Sidebar className="pt-[70px] bg-background/75" collapsible="offcanvas" {...props}>
+    <Sidebar className="pt-[70px] bg-background/75" collapsible="icon" {...props}>
       <SidebarHeader>
         {/* <CreateProjectBtn /> */}
       </SidebarHeader>

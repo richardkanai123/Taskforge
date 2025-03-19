@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sidebar"
 import { TaskStatus } from "@prisma/client"
 import { sampleProjects } from "@/app/data/Data"
+import { getProgressColor } from "@/lib/utils"
 
 const getStatusIcon = (status: TaskStatus) => {
   switch (status) {
@@ -39,6 +40,12 @@ const getStatusIcon = (status: TaskStatus) => {
       return <Circle className="h-4 w-4 text-gray-400" />
   }
 }
+
+
+
+// TODO: Replace this with actual project progress calculation from the database
+// This is temporary and generates random progress values between 0-100
+const getRandomProgress = () => Math.floor(Math.random() * 100)
 
 export function NavMain() {
   const pathname = usePathname()
@@ -112,17 +119,35 @@ export function NavMain() {
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              {
-                sampleProjects.map((project) => (
+              {sampleProjects.map((project) => {
+                // TODO: Replace random progress with actual project progress calculation
+                const progress = getRandomProgress()
+                return (
                   <SidebarMenuItem key={project.id}>
                     <SidebarMenuButton asChild>
-                      <Link href={`/ dashboard / projects / ${project.id}`}>
-                        <span>{project.title}</span>
+                      <Link
+                        href={`/dashboard/projects/${project.id}`}
+                        className={`w-full flex items-center gap-2 group ${pathname === `/dashboard/projects/${project.id}` ? 'text-primary' : ''
+                          }`}
+                      >
+                        <div
+                          className={`h-4 w-4 rounded-sm flex-shrink-0 transition-colors`}
+                          style={{
+                            backgroundColor: getProgressColor(progress),
+                            opacity: pathname === `/dashboard/projects/${project.id}` ? 1 : 0.7
+                          }}
+                        >
+                          <Folder className="h-4 w-4 text-white/80 p-0.5" />
+                        </div>
+                        <span className="truncate">{project.title}</span>
+                        <span className="ml-auto text-xs text-muted-foreground">
+                          {progress}%
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))
-              }
+                )
+              })}
             </CollapsibleContent>
           </Collapsible >
         </SidebarMenu >
@@ -151,7 +176,7 @@ export function NavMain() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/dashboard/tasks">
+              <Link className={`${pathname === `/dashboard/tasks` ? 'text-primary' : ''}`} href="/dashboard/tasks">
                 <span>All Tasks</span>
               </Link>
             </SidebarMenuButton>

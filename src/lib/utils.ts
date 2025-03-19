@@ -18,3 +18,10 @@ export interface SignUpResponse {
   }> | null;
   status: number;
 }
+
+export function getProgressColor(progress: number): string {
+  if (progress >= 80) return '#22c55e' // green-500
+  if (progress >= 50) return '#3b82f6' // blue-500
+  if (progress >= 20) return '#f59e0b' // amber-500
+  return '#6b7280' // gray-500
+}
