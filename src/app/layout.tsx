@@ -44,7 +44,9 @@ export default function RootLayout({
           <Header />
           {/* <SidebarProvider> */}
 
-          {children}
+          <main className="w-full h-full min-h-screen">
+            {children}
+          </main>
           {/* Footer */}
           <Toaster toastOptions={
             {

@@ -1,13 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react"
+import { ChevronsUpDown, LogOut, User } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -19,13 +18,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 
-export function UserSwitcher() {
+export function NavUser() {
   const { isMobile } = useSidebar()
   const { data } = authClient.useSession()
 
-  if (!data?.user) {
+  if (!data) {
     return null
   }
 
@@ -72,18 +71,10 @@ export function UserSwitcher() {
                 Profile
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/settings" className="flex items-center gap-2 p-2">
-                <Settings className="h-4 w-4" />
-                Settings
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-
             <DropdownMenuItem
               className="gap-2 p-2 text-red-600 hover:text-red-600"
             >
-              <Button>
+              <Button variant='destructive' onClick={() => authClient.signOut()}>
                 <LogOut className="h-4 w-4" />
                 Sign out
               </Button>

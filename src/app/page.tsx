@@ -25,7 +25,7 @@ export default function Home() {
             size="lg"
             className="w-32"
           >
-            <Link href='/sign-in'> Learn More</Link>
+            <Link href='/about'> Learn More</Link>
           </Button>
         </div>
       </div>

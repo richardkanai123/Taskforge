@@ -44,3 +44,22 @@ export const SignInSchema = z.object({
 })
 
 export type SignInInput = z.infer<typeof SignInSchema>
+
+export const ProfileSchema = z.object({
+    name: z
+        .string()
+        .min(2, "Name must be at least 2 characters")
+        .max(100, "Name must be less than 100 characters")
+        .regex(/^[a-zA-Z\s]*$/, "Name can only contain letters and spaces"),
+    username: z
+        .string()
+        .min(3, "Username must be at least 3 characters")
+        .max(30, "Username must be less than 30 characters")
+        .regex(
+            /^[a-zA-Z0-9_-]*$/,
+            "Username can only contain letters, numbers, underscores, and hyphens"
+        ),
+    image: z.string().optional(),
+})
+
+export type ProfileInput = z.infer<typeof ProfileSchema>

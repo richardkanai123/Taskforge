@@ -65,7 +65,11 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+		  },
+			gradientColorStops: {
+        'blue-600': '#2563eb',
+        'purple-600': '#9333ea',
+      },		  					
   	}
   },
   plugins: [require("tailwindcss-animate")],

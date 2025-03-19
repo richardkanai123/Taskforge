@@ -2,41 +2,22 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { authClient } from '@/lib/auth-client'
-import Image from 'next/image'
-import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 const LoginBtn = () => {
     const { data, isPending } = authClient.useSession()
     const Router = useRouter()
 
+    if (isPending) {
+        return <Button className='animate-pulse ' variant='ghost' disabled>Loading...</Button>
+    }
+
     if (data) {
         return (
-            <Button
-                variant='destructive'
-                disabled={isPending}
-                size='lg'
-                onClick={async () => {
-                    try {
-                        await authClient.signOut()
-                        toast.success(`See you later`, {
-                            icon: '👋'
-                        })
-                        Router.replace("/")
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            toast.error(error.message)
-                            return
-                        }
-
-                        toast.error("Something went wrong")
-                        return
-                    }
-                }}
-                className='mx-auto text-white'
-            >
-                <Image src={data.user.image || `https://ui-avatars.com/api/?name=${data.user.name}`} alt="Logout" className='rounded-full' width={24} height={24} />
-                Logout
+            <Button variant='ghost' onClick={() => {
+                Router.push('/profile')
+            }}>
+                hi {data.username}
             </Button>
         )
     }

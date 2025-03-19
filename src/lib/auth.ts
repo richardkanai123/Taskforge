@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
  import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./Prisma";
 import { nextCookies } from "better-auth/next-js";
+import { customSession } from "better-auth/plugins";
 export const auth = betterAuth({
     secret: process.env.NEXTAUTH_SECRET,
     appName: "TaskForge",
@@ -24,7 +25,7 @@ export const auth = betterAuth({
                 required: true,
                 input: true,
             },
-        }, 
+        },
     },
     emailAndPassword: {
         enabled: true,
@@ -35,6 +36,28 @@ export const auth = betterAuth({
 
     
     plugins: [
-        nextCookies()
+        nextCookies(),
+        customSession(async ({ session, user }) => { 
+            const roleAndUsername = await prisma.user.findUnique({
+                where: {
+                    id: user.id
+                },
+                select: {
+                    role: true,
+                    username: true,
+                    image: true,
+                    email: true,
+                    name: true
+                }
+            })
+            
+            return {
+                ...session,
+                user,
+                role: roleAndUsername?.role,
+                username: roleAndUsername?.username,
+            }
+        }
+        )
     ]
 })
