@@ -3,10 +3,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import { User, LogIn, Mail, AtSign, Calendar, Activity, CheckCircle2, Clock, Star } from "lucide-react"
+import { User, LogIn, Mail, AtSign, Calendar, Activity, CheckCircle2, Clock, Star, MailWarning } from "lucide-react"
 import SignOutBtn from "@/components/Buttons/SignOutBtn"
 import { EditProfileButton } from "@/components/Buttons/EditProfileButton"
 import { Suspense } from "react"
+import VerifyEmailBtn from "@/components/Buttons/VerifyEmailBtn"
 export default async function ProfilePage() {
     const session = await auth.api.getSession({
         headers: await headers()
@@ -83,7 +84,23 @@ export default async function ProfilePage() {
                                     <Mail className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                     <p className="text-gray-600 dark:text-gray-300">
                                         {user.email}
+
+                                        {user.emailVerified ?
+                                            <CheckCircle2 className="inline-block w-4 h-4 ml-1 text-green-500" title="Email verified" /> :
+
+                                            <MailWarning className="w-4 h-4 inline-block ml-1 text-yellow-300" />
+
+                                        }
                                     </p>
+
+                                    {
+                                        !user.emailVerified && (
+
+                                            <VerifyEmailBtn email={user.email} />
+
+                                        )
+                                    }
+
                                 </div>
                             </div>
 

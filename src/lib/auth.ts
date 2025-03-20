@@ -36,7 +36,32 @@ export const auth = betterAuth({
         enabled: true,
         minPasswordLength: 6,
         maxPasswordLength: 20,
-        autoSignIn: true
+        autoSignIn: true,
+        
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        sendVerificationEmail: async ({user, url}) => {
+            // Send email to user
+            const res = await fetch(`${process.env.BASE_URL}/api/verify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: user.email,
+                    url: url,
+                    username: user.name
+                })
+
+            })
+
+            const data = await res.json()
+
+            if(res.status !== 200) {
+                throw new Error(data.message as string || 'Failed to send verification email') 
+            }  
+        },
     },
 
     
