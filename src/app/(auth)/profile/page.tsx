@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { User, LogIn, Mail, AtSign, Calendar, Activity, CheckCircle2, Clock, Star } from "lucide-react"
 import SignOutBtn from "@/components/Buttons/SignOutBtn"
+import { EditProfileButton } from "@/components/Buttons/EditProfileButton"
+import { Suspense } from "react"
 export default async function ProfilePage() {
     const session = await auth.api.getSession({
         headers: await headers()
@@ -119,11 +121,22 @@ export default async function ProfilePage() {
                                 </Button>
                             </Link>
 
-                            <Link className="w-fit" href="/profile/edit">
-                                <Button size='lg' variant="outline" className="border-gray-200 dark:border-gray-700">
+                            <Suspense fallback={
+                                <Button size='lg' className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
                                     Edit Profile
                                 </Button>
-                            </Link>
+                            }>
+                                <EditProfileButton session={
+                                    {
+                                        username: session.username as string,
+                                        user: {
+                                            name: user.name as string,
+                                            email: user.email as string,
+                                            id: session.id as string,
+                                        }
+                                    }
+                                } />
+                            </Suspense>
 
                             <SignOutBtn />
                         </div>

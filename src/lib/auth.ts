@@ -3,6 +3,11 @@ import { betterAuth } from "better-auth";
 import { prisma } from "./Prisma";
 import { nextCookies } from "better-auth/next-js";
 import { customSession } from "better-auth/plugins";
+import { username } from "better-auth/plugins"
+import { usernameClient } from "better-auth/client/plugins"
+ 
+
+
 export const auth = betterAuth({
     secret: process.env.NEXTAUTH_SECRET,
     appName: "TaskForge",
@@ -37,6 +42,8 @@ export const auth = betterAuth({
     
     plugins: [
         nextCookies(),
+        username(),
+        usernameClient(),
         customSession(async ({ session, user }) => { 
             const roleAndUsername = await prisma.user.findUnique({
                 where: {
