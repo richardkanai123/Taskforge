@@ -15,7 +15,6 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Info } from "lucide-react";
 import { getPriorityColor, getStatusLabel, cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 
 
 type ProjectPreviewProps = {
@@ -68,7 +67,8 @@ export function ProjectPreview({
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
                         <h4 className="text-sm font-medium text-foreground/80">Description</h4>
-                        <Textarea className="min-h-[200px] max-h-fit" value={project.description} readOnly />
+                        <div className="w-full px-3 rounded-md" dangerouslySetInnerHTML={{ __html: project.description }} aria-readonly>
+                        </div>
                     </div>
 
                     <Separator className="my-6" />
@@ -107,10 +107,7 @@ export function ProjectPreview({
                                                     </Badge>
                                                 </div>
                                             </div>
-                                            <div className="w-full rounded-md">
-
-                                                <Textarea className="min-h-[200px] max-h-fit" value={task.description} readOnly />
-
+                                            <div className="w-full px-3 rounded-md" dangerouslySetInnerHTML={{ __html: task.description }}>
                                             </div>
                                             <div className="flex items-center text-xs text-muted-foreground/80">
                                                 <Clock className="mr-1.5 h-3.5 w-3.5" />

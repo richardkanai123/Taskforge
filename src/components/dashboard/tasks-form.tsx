@@ -16,7 +16,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
     SelectContent,
@@ -41,6 +40,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import TipTap from "./TipTap";
 
 type TasksFormProps = {
     tasks: Task[];
@@ -140,10 +140,7 @@ export function TasksForm({ tasks, onSubmit, onPrevious }: TasksFormProps) {
                                             <FormItem>
                                                 <FormLabel>Description</FormLabel>
                                                 <FormControl>
-                                                    <Textarea
-                                                        placeholder="Describe what needs to be done"
-                                                        {...field}
-                                                    />
+                                                    <TipTap content={field.value} onChange={field.onChange} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

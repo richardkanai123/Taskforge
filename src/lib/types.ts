@@ -45,7 +45,7 @@ export const taskFormSchema = z.object({
   description: z
     .string()
     .min(5, "Description must be at least 5 characters")
-    .max(200, "Description must be less than 200 characters"),
+    .max(500, "Description must be less than 500 characters"),
   status: z.enum(["OPEN", "IN_PROGRESS", "COMPLETED"]),
   priority: z.enum(["L1", "L2", "L3", "L4", "L5"]),
   dueDate: z.date(),

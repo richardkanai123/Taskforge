@@ -16,7 +16,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
     SelectContent,
@@ -34,6 +33,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import TipTap from "./TipTap";
 
 type ProjectFormProps = {
     defaultValues: Omit<ProjectWithTasks, "tasks">;
@@ -77,11 +77,7 @@ export function ProjectForm({ defaultValues, onSubmit }: ProjectFormProps) {
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                                <Textarea
-                                    placeholder="Describe the project goals and scope"
-                                    className="min-h-32"
-                                    {...field}
-                                />
+                                <TipTap content={field.value} onChange={field.onChange} />
                             </FormControl>
                             <FormDescription>
                                 Provide details about the project&apos;s purpose and objectives.
