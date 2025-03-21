@@ -6,7 +6,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
 
@@ -14,9 +13,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
 
     <Sidebar className="pt-[70px] bg-background/75" collapsible="icon" {...props}>
-      <SidebarHeader>
-        {/* <CreateProjectBtn /> */}
-      </SidebarHeader>
       <SidebarContent className="overflow-y-auto bg-background/75">
         <NavMain />
       </SidebarContent>

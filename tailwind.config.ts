@@ -8,7 +8,8 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-  	extend: {
+	  extend: {
+			
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -69,8 +70,25 @@ export default {
 			gradientColorStops: {
         'blue-600': '#2563eb',
         'purple-600': '#9333ea',
-      },		  					
-  	}
+		  },	
+	
+		 keyframes: {
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "slide-in-from-right": {
+          "0%": { transform: "translateX(10%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 0.3s ease-in-out",
+		  "slide-in-from-right": "slide-in-from-right 0.3s ease-out",
+		
+      },
+    },
+  	
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

@@ -52,7 +52,6 @@ export function NavMain() {
 
   return (
     <>
-      {/* Quick Actions */}
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
