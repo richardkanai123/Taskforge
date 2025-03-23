@@ -33,6 +33,7 @@ export default function CreateProjectPage() {
         status: "OPEN",
         dueDate: new Date(),
         tasks: [],
+        githubRepo: "",
     });
 
     const router = useRouter();
@@ -114,13 +115,87 @@ export default function CreateProjectPage() {
     const handleCreateProject = async () => {
         try {
             // Simulate API call
-            console.log("Creating project...", projectData);
             toast("Creating project...", { icon: "🚀" });
-            // Redirect to project page
-            // router.push("/projects");
+
+            const response = await fetch("/api/projects", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: projectData.title,
+                    description: projectData.description,
+                    status: projectData.status,
+                    dueDate: projectData.dueDate,
+                    creatorId: data.userId,
+                    leadId: data.userId,
+                    githubRepo: projectData.githubRepo,
+                }),
+            });
+
+            const responseData = await response.json();
+            if (response.status !== 201) {
+                toast.error(responseData.message as string || 'Failed to add project! Try again later.', { icon: "🚨" });
+                return
+            }
+
+            const projectId = responseData.id as string;
+            const projectTitle = responseData.title as string;
+
+            // check if project has tasks
+            if (projectData.tasks.length === 0) {
+                toast.success(`Project ${projectTitle} created successfully`, { icon: "🎉" });
+                router.push(`/dashboard/projects/success?projectId=${projectId}?title=${projectTitle}`);
+                return
+            }
+
+
+            // create tasks
+            const tasks = projectData.tasks
+
+            // toast
+            toast(`Creating tasks for ${projectTitle}`, { icon: "➕" });
+
+            tasks.map(async (task) => {
+                const response = await fetch("/api/tasks/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        title: task.title,
+                        description: task.description,
+                        projectId: projectId,
+                        assignedId: data.userId,
+                        status: task.status,
+                        dueDate: task.dueDate,
+                        priority: task.priority,
+                    }),
+                });
+
+                const taskResponseData = await response.json();
+                if (response.status !== 201) {
+                    toast.error(taskResponseData.message as string || 'Failed to add task! Try again later.', { icon: "🚨" });
+                    return
+                }
+
+                const taskTitle = taskResponseData.title as string
+
+                toast.success(taskTitle, {
+                    icon: '✅'
+                })
+            })
+
+            router.replace(`/dashboard/projects/success?projectId=${projectId}?title=${projectTitle}`);
+
+
+
+
         } catch (error) {
-            console.error(error);
-            toast("An error occurred", { icon: "🚨" });
+            if (error instanceof Error) {
+                toast.error(error.message, { icon: "🚨" });
+            }
+            toast.error("An error occurred. Please try again later.", { icon: "🚨" });
         }
     };
 

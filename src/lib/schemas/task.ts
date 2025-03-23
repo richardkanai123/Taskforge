@@ -17,8 +17,8 @@ enum PRIORITY {
 export const NewTaskSchema = z.object({
 	title: z.string().min(1, "Task title is required"),
 	description: z.string(),
-	projectId: z.string().cuid(),
-	owner: z.string().cuid(),
+	projectId: z.string(),
+	assignedId: z.string().optional(),
 	status: z.nativeEnum(TASK_STATUS).default(TASK_STATUS.OPEN),
 	dueDate: z.coerce.date(),
 	priority: z.nativeEnum(PRIORITY),

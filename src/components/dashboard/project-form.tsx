@@ -47,7 +47,10 @@ export function ProjectForm({ defaultValues, onSubmit }: ProjectFormProps) {
     });
 
     function handleSubmit(values: z.infer<typeof projectFormSchema>) {
-        onSubmit(values);
+        onSubmit({
+            ...values,
+            githubRepo: values.githubRepo || undefined,
+        });
     }
 
     return (
@@ -64,6 +67,26 @@ export function ProjectForm({ defaultValues, onSubmit }: ProjectFormProps) {
                             </FormControl>
                             <FormDescription>
                                 Give your project a clear, descriptive name.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="githubRepo"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Github | Repo Link</FormLabel>
+                            <FormControl>
+                                <Input placeholder="eg : https://github.com/project-repo-name" {...field}
+                                    value={field.value || ""}
+                                    required={false}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                Provide a link to the project&apos;s GitHub repository or external files link.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

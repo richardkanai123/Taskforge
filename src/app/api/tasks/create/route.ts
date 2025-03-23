@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/Prisma";
 import { NewTaskSchema } from "@/lib/schemas/task";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -25,11 +26,10 @@ export async function POST(request: NextRequest) {
             title: isValidTaskData.data.title,
             description: isValidTaskData.data.description,
             projectId: isValidTaskData.data.projectId,
-            assignedId: isValidTaskData.data.owner,
+            assignedId: isValidTaskData.data.assignedId,
             status: isValidTaskData.data.status,
             dueDate: isValidTaskData.data.dueDate,
             priority: isValidTaskData.data.priority,
-            progress: isValidTaskData.data.progress,
         }, select: {
             title: true,
             status: true,
@@ -37,9 +37,8 @@ export async function POST(request: NextRequest) {
     }
     );
 
-        if (!newTask) {
-            return NextResponse.json({ message: "Failed to create task" }, { status: 500 });
-        }
+        revalidatePath('/dashboard')
+        revalidatePath('/dashboard/tasks')
 
         return NextResponse.json(newTask, { status: 201 });
         

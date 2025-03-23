@@ -17,10 +17,11 @@ export interface ProjectWithTasks {
   description: string;
   status: ProjectStatus;
   dueDate: Date;
+  githubRepo?: string;
   tasks: Task[];
 }
 
-// lib/validations.ts
+
 import { z } from "zod";
 
 export const projectFormSchema = z.object({
@@ -31,9 +32,10 @@ export const projectFormSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 10 characters")
-    .max(500, "Description must be less than 500 characters"),
+    .max(1000, "Description must be less than 1000 characters"),
   status: z.enum(["OPEN", "IN_PROGRESS", "COMPLETED"]),
   dueDate: z.date().min(new Date(), "Due date must be in the future"),
+  githubRepo: z.string().url().nullable(),
 });
 
 export const taskFormSchema = z.object({

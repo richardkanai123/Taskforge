@@ -167,6 +167,9 @@ model Project {
 
   // Tasks in this project
   tasks Task[]
+
+  // github repo
+  githubRepo String?
 }
 
 // Task model
@@ -187,8 +190,8 @@ model Task {
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   // Assigned user (owner)
-  assignedId String
-  assignedTo User   @relation("AssignedTo", fields: [assignedId], references: [id])
+  assignedId String?
+  assignedTo User?   @relation("AssignedTo", fields: [assignedId], references: [id])
 
   // Comments on this task
   comments Comment[]

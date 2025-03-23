@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/Prisma";
 import { NewProjectSchema } from "@/lib/schemas/project";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
@@ -47,9 +48,11 @@ export async function POST(request: NextRequest) {
                 creatorId: isValidProjectData.data.creatorId,
                 leadId: isValidProjectData.data.leadId as string,
                 customerId: isValidProjectData.data.customerId as string,
+                githubRepo: isValidProjectData.data.githubRepo,
             }, select: {
                 title: true,
                 status: true,
+                id: true,
             }
         }
         );
@@ -57,6 +60,9 @@ export async function POST(request: NextRequest) {
         if (!newProject) {
             return NextResponse.json({ message: "Failed to create project" }, { status: 500 });
         }
+
+         revalidatePath('/dashboard')
+                revalidatePath('/dashboard/projects')
 
         return NextResponse.json(newProject, { status: 201 });
 
