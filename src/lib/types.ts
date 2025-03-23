@@ -35,7 +35,11 @@ export const projectFormSchema = z.object({
     .max(1000, "Description must be less than 1000 characters"),
   status: z.enum(["OPEN", "IN_PROGRESS", "COMPLETED"]),
   dueDate: z.date().min(new Date(), "Due date must be in the future"),
-  githubRepo: z.string().url().nullable(),
+  githubRepo: z.union([
+    z.string().url("Please enter a valid URL"),
+    z.string().length(0),
+    z.string().optional()
+  ]),
 });
 
 export const taskFormSchema = z.object({

@@ -78,15 +78,20 @@ export function ProjectForm({ defaultValues, onSubmit }: ProjectFormProps) {
                     name="githubRepo"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Github | Repo Link</FormLabel>
+                            <FormLabel>Github Repository (Optional)</FormLabel>
                             <FormControl>
-                                <Input placeholder="eg : https://github.com/project-repo-name" {...field}
+                                <Input
+                                    placeholder="https://github.com/username/repo"
+                                    {...field}
                                     value={field.value || ""}
-                                    required={false}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        field.onChange(value === "" ? undefined : value);
+                                    }}
                                 />
                             </FormControl>
                             <FormDescription>
-                                Provide a link to the project&apos;s GitHub repository or external files link.
+                                Optional: Add a link to your project&apos;s GitHub repository
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -169,7 +174,14 @@ export function ProjectForm({ defaultValues, onSubmit }: ProjectFormProps) {
                                         <Calendar
                                             mode="single"
                                             selected={field.value}
-                                            onSelect={field.onChange}
+                                            onSelect={(date) => {
+                                                // Set time to midnight
+                                                if (date) {
+                                                    const midnight = new Date(date);
+                                                    midnight.setHours(0, 0, 0, 0);
+                                                    field.onChange(midnight);
+                                                }
+                                            }}
                                             disabled={(date) =>
                                                 date < new Date(new Date().setHours(0, 0, 0, 0))
                                             }
