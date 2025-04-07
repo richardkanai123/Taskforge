@@ -1,60 +1,38 @@
-
 import { headers } from "next/headers"
+import { auth } from "../auth"
 
-const ProjectsApiUrl = `${process.env.BASE_URL}/api/projects`
-
-export async function getUserProjects(){
- try {
-    const headersList = headers()
-    const token = (await headersList).get('authorization')
-    
-    const response = await fetch('http://localhost:3000/api/projects/getuserprojects', {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token || ''
-        },
-    })
-     console.log('response', response.status)
-     
-    if (!response.ok) {
-        throw new Error('Failed to fetch projects')
+export async function getUserProjects() {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
+  
+  if (!session?.user?.id) {
+    return {
+      projects: null,
+      message: "Unauthorized",
+      status: 401,
     }
-    
-     const detailedProjects = await response.json()
-
-     console.log('detailedProjects', detailedProjects)
-     return detailedProjects
-     
- } catch (error) {
-     if(error instanceof Error) {
-         console.error('Error fetching projects:', error.message)
-         return {error: error.message, success: false}
-     }
-     
-     console.error('Error fetching projects:', error)
-        return {error: 'Unknown error', success: false}
- }
-}
-
-
-
-
-export async function getProjectById(id: string) {
-  const headersList = headers()
-  const token = (await headersList).get('authorization')
-
-  const response = await fetch(`${ProjectsApiUrl}/${id}`, {
-    method: 'GET',
+  }
+  
+  const response = await fetch(`${process.env.BASE_URL}/api/projects/getuserprojects`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token || ''
+      'Cookie': (await headers()).get('cookie') || '',
     },
   })
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch project')
+  const resData = await response.json()
+  if (response.status !== 200) {
+    return {
+      projects: null,
+      message: resData.message || "Error fetching projects",
+      status: response.status,
+    }
   }
 
-  return response.json()
+  return {
+    projects: resData,
+    message: "Projects fetched successfully",
+    status: 200,
+  }
+  
 }

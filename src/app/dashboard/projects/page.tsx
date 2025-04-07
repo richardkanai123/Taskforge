@@ -1,31 +1,35 @@
+import ProjectsViewTab from "@/components/dashboard/ProjectsViewTab"
 import { DataTable } from "@/components/tables/ProjectsTable"
 import { columns } from "@/components/tables/ProjectsTableColumns"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
+import { getUserProjects } from "@/lib/actions/get-projects"
+// import { auth } from "@/lib/auth"
+// import { headers } from "next/headers"
 import { Suspense } from "react"
 
 const MainProjectsPage = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
+    // const session = await auth.api.getSession({
+    //     headers: await headers()
+    // })
 
-    if (!session?.user?.id) {
-        return <div>Please sign in to view projects</div>
-    }
+    // if (!session?.user?.id) {
+    //     return <div>Please sign in to view projects</div>
+    // }
 
-    const response = await fetch(`${process.env.BASE_URL}/api/projects/getuserprojects`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Cookie': (await headers()).get('cookie') || '',
-        },
-    })
-    if (response.status !== 200) {
-        console.error('Error fetching projects:', response.statusText)
-        return <div>Error fetching projects</div>
-    }
+    // const response = await fetch(`${process.env.BASE_URL}/api/projects/getuserprojects`, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Cookie': (await headers()).get('cookie') || '',
+    //     },
+    // })
+    // if (response.status !== 200) {
+    //     console.error('Error fetching projects:', response.statusText)
+    //     return <div>Error fetching projects</div>
+    // }
 
-    const projects = await response.json()
+    // const projects = await response.json()
     // console.log('resData', projects)
+
+    const { projects, message } = await getUserProjects()
 
     if (!projects || projects.length === 0) {
         return (
@@ -45,13 +49,23 @@ const MainProjectsPage = async () => {
                     />
                 </svg>
                 <h3 className="text-xl font-semibold mb-2">No Projects Found</h3>
-                <p className="text-gray-400">Create a new project to get started</p>
+                <p className="text-gray-400">{message}</p>
             </div>
         )
     }
+
     return (
         <div className="flex flex-col w-full h-full p-4 space-y-4 max-w-screen-xl mx-auto">
-            <h1 className="text-2xl font-bold">Projects</h1>
+            <div className="p-2 mx-auto w-full flex justify-around">
+                <div className="flex flex-col">
+                    <h1 className="text-2xl font-bold">Projects</h1>
+                    <p className="text-gray-500">Manage your projects here</p>
+                </div>
+
+                <div className="flex">
+                    <ProjectsViewTab />
+                </div>
+            </div>
             <Suspense fallback={<div>Loading...</div>}>
                 <DataTable data={projects} columns={columns} />
             </Suspense>
