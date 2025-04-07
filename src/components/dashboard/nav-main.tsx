@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar"
 import { TaskStatus } from "@prisma/client"
 import { sampleProjects } from "@/app/data/Data"
-import { getProgressColor } from "@/lib/utils"
+// import { getProgressColor } from "@/lib/utils"
 
 const getStatusIcon = (status: TaskStatus) => {
   switch (status) {
@@ -45,7 +45,7 @@ const getStatusIcon = (status: TaskStatus) => {
 
 // TODO: Replace this with actual project progress calculation from the database
 // This is temporary and generates random progress values between 0-100
-const getRandomProgress = () => Math.floor(Math.random() * 100)
+// const getRandomProgress = () => Math.floor(Math.random() * 100)
 
 export function NavMain() {
   const pathname = usePathname()
@@ -120,7 +120,7 @@ export function NavMain() {
             <CollapsibleContent>
               {sampleProjects.map((project) => {
                 // TODO: Replace random progress with actual project progress calculation
-                const progress = getRandomProgress()
+                // const progress = getRandomProgress()
                 return (
                   <SidebarMenuItem key={project.id}>
                     <SidebarMenuButton asChild>
@@ -131,16 +131,15 @@ export function NavMain() {
                       >
                         <div
                           className={`h-4 w-4 rounded-sm flex-shrink-0 transition-colors`}
-                          style={{
-                            backgroundColor: getProgressColor(progress),
-                            opacity: pathname === `/dashboard/projects/${project.id}` ? 1 : 0.7
-                          }}
+                        // style={{
+                        //   backgroundColor: getProgressColor(progress),
+                        // }}
                         >
                           <Folder className="h-4 w-4 text-white/80 p-0.5" />
                         </div>
                         <span className="truncate">{project.title}</span>
                         <span className="ml-auto text-xs text-muted-foreground">
-                          {progress}%
+                          30%
                         </span>
                       </Link>
                     </SidebarMenuButton>

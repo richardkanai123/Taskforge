@@ -1,5 +1,4 @@
 // get all projects
-
 import { prisma } from "@/lib/Prisma";
 import { NewProjectSchema } from "@/lib/schemas/project";
 import { revalidatePath } from "next/cache";

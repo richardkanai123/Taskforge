@@ -67,6 +67,8 @@ model User {
 
   image String?
 
+  // indexes for faster lookups
+  @@index([email, id])
   @@map("user")
 }
 
@@ -170,6 +172,9 @@ model Project {
 
   // github repo
   githubRepo String?
+
+  // indexes for faster lookups
+  @@index([title, id])
 }
 
 // Task model
@@ -195,6 +200,9 @@ model Task {
 
   // Comments on this task
   comments Comment[]
+
+  // indexes for faster lookups
+  @@index([title, id, projectId])
 }
 
 // Comment model
@@ -212,4 +220,7 @@ model Comment {
   // Author relationship
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
+
+  // indexes for faster lookups
+  @@index([taskId, id, authorId])
 }
