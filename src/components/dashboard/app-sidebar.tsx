@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavUser } from "@/components/dashboard/nav-user"
 import {
@@ -8,20 +6,30 @@ import {
   SidebarFooter,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { getUserProjects } from "@/lib/actions/get-projects"
+import { Suspense } from "react"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+
+  const { projects, message, status } = await getUserProjects()
+
   return (
 
     <Sidebar className="pt-[70px] bg-background/75" collapsible="icon" {...props}>
       <SidebarContent className="overflow-y-auto bg-background/75">
-        <NavMain />
+        <NavMain Projects={projects} message={status !== 200 ? message : 'success'} />
       </SidebarContent>
       <SidebarFooter>
-        <React.Suspense fallback={<div className="w-full p-2 animate-pulse">
-          <div className="w-1/2 h-4 bg-gray-200 rounded"></div>
+        <Suspense fallback={<div className="flex items-center gap-3 p-3 animate-pulse">
+          <div className="w-8 h-8 rounded-full bg-muted" />
+          <div className="space-y-2 flex-1">
+            <div className="h-3 w-24 bg-muted rounded" />
+            <div className="h-2 w-16 bg-muted/80 rounded" />
+          </div>
         </div>}>
           <NavUser />
-        </React.Suspense>
+        </Suspense>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

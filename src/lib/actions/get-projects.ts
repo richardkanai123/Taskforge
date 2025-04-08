@@ -1,7 +1,12 @@
 import { headers } from "next/headers"
 import { auth } from "../auth"
+import { ProjectWithDetails } from "../types";
 
-export async function getUserProjects() {
+export async function getUserProjects(): Promise<{
+    projects: ProjectWithDetails[] | null;
+    message: string;
+    status: number;
+}> {
   const session = await auth.api.getSession({
     headers: await headers()
   })
@@ -24,7 +29,7 @@ export async function getUserProjects() {
   if (response.status !== 200) {
     return {
       projects: null,
-      message: resData.message || "Error fetching projects",
+      message: resData.message as string || "Error fetching projects",
       status: response.status,
     }
   }
@@ -32,7 +37,7 @@ export async function getUserProjects() {
   return {
     projects: resData,
     message: "Projects fetched successfully",
-    status: 200,
+    status: response.status,
   }
   
 }

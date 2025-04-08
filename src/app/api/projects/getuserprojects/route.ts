@@ -61,21 +61,20 @@ export async function GET(request: NextRequest) {
             }
         });
 
-        // calculate progress for each project
-        const projectsWithProgress = projects.map((project) => {
+        const calculateProjectProgress = (project: { tasks: { progress?: number }[] }) => {
             const totalTasks = project.tasks.length;
             const TotalProgress = project.tasks.reduce(
-                (acc, task) => acc + (task.progress || 0),
-                0
+            (acc, task) => acc + (task.progress || 0),
+            0
             );
-            const progress =
-                totalTasks === 0 ? 0 : (TotalProgress / totalTasks);
+            return totalTasks === 0 ? 0 : (TotalProgress / totalTasks);
+        };
 
-            return {
-                ...project,
-                progress,
-            };
-        });
+        // calculate progress for each project
+        const projectsWithProgress = projects.map((project) => ({
+            ...project,
+            progress: calculateProjectProgress(project)
+        }));
 
         return NextResponse.json(projectsWithProgress, { status: 200 });
     } catch (error) {
