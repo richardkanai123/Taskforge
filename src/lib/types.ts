@@ -2,7 +2,6 @@
 export type ProjectStatus = "OPEN" | "IN_PROGRESS" | "COMPLETED";
 export type TaskStatus = "OPEN" | "IN_PROGRESS" | "COMPLETED";
 export type Priority = "L1" | "L2" | "L3" | "L4" | "L5";
-
 export interface Task {
 	id?: string;
 	title: string;
@@ -98,4 +97,24 @@ export interface ProjectWithDetails {
 			name: string | null;
 		} | null;
 	}[];
+}
+
+
+// task with project details
+export interface TaskWithProject {
+	 project: {
+    id: string;
+    title: string;
+  },
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  description: string;
+  status: TaskStatus;
+  dueDate: Date;
+  priority: Priority;
+  progress: number;
+  projectId: string;
+  assignedId: string | null;
 }

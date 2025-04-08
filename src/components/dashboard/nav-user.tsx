@@ -74,7 +74,8 @@ export function NavUser() {
             <DropdownMenuItem
               className="gap-2 p-2 text-red-600 hover:text-red-600"
             >
-              <Button variant='destructive' onClick={() => authClient.signOut()}>
+              {/* temp reload */}
+              <Button variant='destructive' onClick={async () => await authClient.signOut().then(() => window.location.reload())}>
                 <LogOut className="h-4 w-4" />
                 Sign out
               </Button>

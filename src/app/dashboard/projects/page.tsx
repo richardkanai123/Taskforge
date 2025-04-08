@@ -2,32 +2,9 @@ import ProjectsViewTab from "@/components/dashboard/ProjectsViewTab"
 import { DataTable } from "@/components/tables/ProjectsTable"
 import { columns } from "@/components/tables/ProjectsTableColumns"
 import { getUserProjects } from "@/lib/actions/get-projects"
-// import { auth } from "@/lib/auth"
-// import { headers } from "next/headers"
 import { Suspense } from "react"
 
 const MainProjectsPage = async () => {
-    // const session = await auth.api.getSession({
-    //     headers: await headers()
-    // })
-
-    // if (!session?.user?.id) {
-    //     return <div>Please sign in to view projects</div>
-    // }
-
-    // const response = await fetch(`${process.env.BASE_URL}/api/projects/getuserprojects`, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Cookie': (await headers()).get('cookie') || '',
-    //     },
-    // })
-    // if (response.status !== 200) {
-    //     console.error('Error fetching projects:', response.statusText)
-    //     return <div>Error fetching projects</div>
-    // }
-
-    // const projects = await response.json()
-    // console.log('resData', projects)
 
     const { projects, message } = await getUserProjects()
 
@@ -56,18 +33,18 @@ const MainProjectsPage = async () => {
 
     return (
         <div className="flex flex-col w-full h-full p-4 space-y-4 max-w-screen-xl mx-auto">
-            <div className="p-2 mx-auto w-full flex justify-around">
+            <div className="p-2 mx-auto w-full flex align-middle  justify-around">
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-bold">Projects</h1>
                     <p className="text-gray-500">Manage your projects here</p>
                 </div>
 
-                <div className="flex">
+                <div className="self-end ml-auto">
                     <ProjectsViewTab />
                 </div>
             </div>
             <Suspense fallback={<div>Loading...</div>}>
-                <DataTable data={projects} columns={columns} />
+                <DataTable data={projects.map(p => ({ ...p, progress: p.progress ?? 0 }))} columns={columns} />
             </Suspense>
         </div >
     )
