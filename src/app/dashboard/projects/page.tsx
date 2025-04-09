@@ -1,23 +1,30 @@
-import ProjectsViewTab from "@/components/dashboard/ProjectsViewTab"
-import { DataTable } from "@/components/tables/ProjectsTable"
-import { columns } from "@/components/tables/ProjectsTableColumns"
-import { getUserProjects } from "@/lib/actions/get-projects"
-import { Suspense } from "react"
+import ProjectsFolderView from "@/components/dashboard/ProjectsFolderView";
+import ProjectsViewTab from "@/components/dashboard/ProjectsViewTab";
+import { DataTable } from "@/components/tables/ProjectsTable";
+import { columns } from "@/components/tables/ProjectsTableColumns";
+import { getUserProjects } from "@/lib/actions/get-projects";
+import { SearchParams } from "next/dist/server/request/search-params";
+import { Suspense } from "react";
 
-const MainProjectsPage = async () => {
+const MainProjectsPage = async ({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) => {
+    const { view } = await searchParams;
 
-    const { projects, message } = await getUserProjects()
+    console.log(view);
+    const { projects, message } = await getUserProjects();
 
     if (!projects || projects.length === 0) {
         return (
-            <div className="mx-auto flex flex-col items-center justify-center p-8 text-gray-500" >
+            <div className="mx-auto flex flex-col items-center justify-center p-8 text-gray-500">
                 <svg
                     className="w-24 h-24 mb-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -28,7 +35,7 @@ const MainProjectsPage = async () => {
                 <h3 className="text-xl font-semibold mb-2">No Projects Found</h3>
                 <p className="text-gray-400">{message}</p>
             </div>
-        )
+        );
     }
 
     return (
@@ -40,14 +47,23 @@ const MainProjectsPage = async () => {
                 </div>
 
                 <div className="self-end ml-auto">
-                    <ProjectsViewTab />
+                    <ProjectsViewTab view={view as string} />
                 </div>
             </div>
-            <Suspense fallback={<div>Loading...</div>}>
-                <DataTable data={projects.map(p => ({ ...p, progress: p.progress ?? 0 }))} columns={columns} />
-            </Suspense>
-        </div >
-    )
-}
+            {view === "table" ? (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <DataTable
+                        data={projects.map((p) => ({ ...p, progress: p.progress ?? 0 }))}
+                        columns={columns}
+                    />
+                </Suspense>
+            ) : (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <ProjectsFolderView projects={projects} />
+                </Suspense>
+            )}
+        </div>
+    );
+};
 
-export default MainProjectsPage
+export default MainProjectsPage;
