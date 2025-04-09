@@ -15,7 +15,7 @@ import {
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import { Task } from "@prisma/client"
-import { format } from "date-fns"
+import { formatDistanceToNowStrict } from "date-fns"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -80,11 +80,21 @@ export const columns: ColumnDef<Task>[] = [
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             const status = row.getValue("status") as string
             const statusColor = {
-                COMPLETED: "bg-green-500 text-white hover:bg-green-600",
+                COMPLETED: "bg-green-600 text-white hover:bg-green-600",
                 IN_PROGRESS: "bg-blue-500 text-white hover:bg-blue-600",
                 OPEN: "bg-yellow-500 text-white hover:bg-yellow-600",
                 BLOCKED: "bg-red-500 text-white hover:bg-red-600"
@@ -92,23 +102,37 @@ export const columns: ColumnDef<Task>[] = [
 
             return <Badge className={`${statusColor}`}>{status}</Badge>
         },
+        enableSorting: true,
+        enableHiding: false,
     },
     {
         accessorKey: "dueDate",
-        header: "Due Date",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Due Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             const date = row.getValue("dueDate") as Date
             // if return date is less than one week, return no of days from today else return the date 
-            const today = new Date()
+            // const today = new Date()
             const dueDate = new Date(date)
-            const diff = dueDate.getTime() - today.getTime()
-            const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+            const diff = formatDistanceToNowStrict(dueDate, { addSuffix: true })
+
             return (
                 <div className="capitalize">
-                    {days < 7 ? `in ${days} days` : format(date, "dd MMM yyyy")}
+                    {diff}
                 </div>
             )
         },
+        enableSorting: true,
+        enableHiding: false,
     },
     {
         accessorKey: "priority",
@@ -133,7 +157,7 @@ export const columns: ColumnDef<Task>[] = [
 
             return <Badge className={`${priorityColor}`}>{priority}</Badge>
         },
-        enableSorting: false,
+        enableSorting: true,
         enableHiding: false,
     },
     {

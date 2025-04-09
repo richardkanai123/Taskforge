@@ -18,7 +18,17 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
 
     <Sidebar className="pt-[70px] bg-background/75" collapsible="icon" {...props}>
       <SidebarContent className="overflow-y-auto bg-background/75">
-        <NavMain Projects={projects} message={status !== 200 ? message : 'success'} />
+        <Suspense fallback={
+          <div className="flex items-center gap-3 p-3 animate-pulse">
+            <div className="w-8 h-8 rounded-full bg-muted" />
+            <div className="space-y-2 flex-1">
+              <div className="h-3 w-24 bg-muted rounded" />
+              <div className="h-2 w-16 bg-muted/80 rounded" />
+            </div>
+          </div>
+        }>
+          <NavMain Projects={projects} message={status !== 200 ? message : 'success'} />
+        </Suspense>
       </SidebarContent>
       <SidebarFooter>
         <Suspense fallback={<div className="flex items-center gap-3 p-3 animate-pulse">
