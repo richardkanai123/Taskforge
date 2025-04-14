@@ -1,14 +1,20 @@
 // lib/types.ts
+import { TaskStatus, Priority } from '@prisma/client'
+
 export type ProjectStatus = "OPEN" | "IN_PROGRESS" | "COMPLETED";
-export type TaskStatus = "OPEN" | "IN_PROGRESS" | "COMPLETED";
-export type Priority = "L1" | "L2" | "L3" | "L4" | "L5";
+
 export interface Task {
-	id?: string;
-	title: string;
-	description: string;
-	status: TaskStatus;
-	priority: Priority;
-	dueDate: Date;
+    id: string;
+    title: string;
+    description: string;
+    status: TaskStatus;
+    dueDate: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    priority: Priority;
+    progress: number;
+    projectId: string;
+    assignedId: string | null;
 }
 
 export interface ProjectWithTasks {

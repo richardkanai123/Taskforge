@@ -1,9 +1,11 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Activity, CheckCircle2, Clock, ListTodo } from "lucide-react"
-import { sampleTasks, sampleProjects } from "@/app/data/Data"
+import { getUserProjects } from '@/lib/actions/get-projects'
+import { getUserTasks } from '@/lib/actions/get-tasks'
+import { Suspense } from 'react'
+import MainStatsCards from '@/components/dashboard/MainStatsCards'
+import { TasksBoardWrapper } from '@/components/dashboard/tasks/TasksBoardWrapper'
 
 const Dashboard = async () => {
     const session = await auth.api.getSession({
@@ -14,129 +16,98 @@ const Dashboard = async () => {
         redirect('/sign-in')
     }
 
-    // Calculate dashboard stats
-    const stats = {
-        totalTasks: sampleTasks.length,
-        completedTasks: sampleTasks.filter(task => task.status === 'IN_PROGRESS').length,
-        inProgressTasks: sampleTasks.filter(task => task.status === 'IN_PROGRESS').length,
-        activeProjects: sampleProjects.filter(project => project.status === 'IN_PROGRESS').length
+    const { projects, message: projectsMessage, status: projectsStatus } = await getUserProjects()
+
+    const { tasks, message: tasksMessage, status: tasksStatus } = await getUserTasks()
+
+
+    if (projectsStatus !== 200 || tasksStatus !== 200) {
+        return (
+            <div className="flex flex-col w-full h-full min-h-screen p-4 md:p-6 gap-4 md:gap-6 overflow-auto mx-auto align-middle justify-center">
+                <h1 className="text-sm font-semibold">Hey {session.user?.name},</h1>
+                <h2 className="text-sm font-semibold">Dashboard</h2>
+                <div className="flex flex-col w-full h-full min-h-screen p-4 md:p-6 gap-4 md:gap-6 overflow-auto mx-auto align-middle justify-center">
+                    <h1 className="text-sm font-semibold">Hey {session.user?.name},</h1>
+                    <h2 className="text-sm font-semibold">Dashboard</h2>
+                    <p className="text-sm text-muted-foreground">{projectsMessage}</p>
+                    <p className="text-sm text-muted-foreground">{tasksMessage}</p>
+                </div>
+            </div>
+        )
     }
 
+
+
+    const stats = {
+        totalTasks: tasks?.length || 0,
+        completedTasks: tasks?.filter((task) => task.status === "COMPLETED").length || 0,
+        ongoingTasks: tasks?.filter((task) => task.status === "IN_PROGRESS").length || 0,
+        activeProjects: projects?.filter((project) => project.status === "OPEN" || project.status === "IN_PROGRESS").length || 0,
+        totalProject: projects?.length || 0,
+        overdueTasksCount: tasks?.filter(task =>
+            task.status !== "COMPLETED" &&
+            task.dueDate &&
+            new Date(task.dueDate) < new Date()
+        ).length || 0,
+        highPriorityTasks: tasks?.filter(task => task.priority === "L1").length || 0,
+        tasksThisWeek: tasks?.filter(task => {
+            if (!task.dueDate) return false;
+            const dueDate = new Date(task.dueDate);
+            const today = new Date();
+            const nextWeek = new Date();
+            nextWeek.setDate(today.getDate() + 7);
+            return dueDate >= today && dueDate <= nextWeek;
+        }).length || 0,
+        projectCompletionRate: projects ?
+            Math.round((projects.filter(p => p.status === "COMPLETED").length / projects.length) * 100) : 0
+    }
+
+
     return (
-        <div className="flex flex-col w-full h-full min-h-screen p-4 md:p-6 gap-4 md:gap-6 overflow-auto mx-auto align-middle justify-center">
+        <div className="flex flex-col w-full h-full min-h-screen p-4 md:p-6 gap-4 md:gap-6 mx-auto align-middle justify-center">
+
+            {/* Header */}
+            <div className="flex items-center justify-between">
+                <h1 className="text-sm font-semibold">Hey {session.user?.name},</h1>
+                <h2 className="text-sm font-semibold">Dashboard</h2>
+            </div>
+
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
-                        <ListTodo className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.totalTasks}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Completed</CardTitle>
-                        <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.completedTasks}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-                        <Clock className="h-4 w-4 text-blue-500" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.inProgressTasks}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
-                        <Activity className="h-4 w-4 text-purple-500" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.activeProjects}</div>
-                    </CardContent>
-                </Card>
+                <Suspense fallback={
+                    <div className='w-full flex justify-around mx-auto animate-pulse'>
+                        {/* four animating cards */}
+                        <div className="w-1/2 h-24 bg-gray-200 rounded-lg"></div>
+                        <div className="w-1/2 h-24 bg-gray-200 rounded-lg"></div>
+                        <div className="w-1/2 h-24 bg-gray-200 rounded-lg"></div>
+                        <div className="w-1/2 h-24 bg-gray-200 rounded-lg"></div>
+                    </div>
+                }>
+                    <MainStatsCards stats={stats} />
+                </Suspense>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 flex-1">
-                {/* Recent Tasks */}
-                <Card className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle>Recent Tasks</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1 overflow-auto">
-                        <div className="space-y-4">
-                            {sampleTasks.slice(0, 5).map(task => (
-                                <div
-                                    key={task.id}
-                                    className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50 transition-colors"
-                                >
-                                    <div className={[
-                                        'h-2 w-2 shrink-0 rounded-full',
-                                        task.status === 'IN_PROGRESS'
-                                            ? 'bg-blue-500'
-                                            : task.status === 'OPEN'
-                                                ? 'bg-gray-300'
-                                                : 'bg-green-500'
-                                    ].join(' ')} />
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium truncate">{task.title}</p>
-                                        <p className="text-xs text-muted-foreground truncate">
-                                            {task.description}
-                                        </p>
-                                    </div>
-                                    <div className="text-xs font-medium text-muted-foreground shrink-0">
-                                        {task.progress}%
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {/* Project Overview */}
-                <Card className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle>Project Status</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1 overflow-auto">
-                        <div className="space-y-6">
-                            {sampleProjects.map(project => {
-                                const projectTasks = sampleTasks.filter(task => task.projectId === project.id)
-                                const completedTasks = projectTasks.filter(task => task.status !== 'IN_PROGRESS' && task.status !== 'OPEN').length
-                                const progress = (completedTasks / projectTasks.length) * 100 || 0
 
-                                return (
-                                    <div key={project.id} className="space-y-2">
-                                        <div className="flex items-center justify-between gap-2">
-                                            <p className="text-sm font-medium truncate flex-1">
-                                                {project.title}
-                                            </p>
-                                            <span className="text-xs text-muted-foreground whitespace-nowrap">
-                                                {completedTasks}/{projectTasks.length} tasks
-                                            </span>
-                                        </div>
-                                        <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                                            <div
-                                                className="h-full rounded-full bg-primary transition-all duration-300"
-                                                style={{ width: `${progress}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+            {/* tasks kanban board */}
+            <Suspense fallback={
+                <div className='w-full flex justify-around mx-auto animate-pulse'>
+                    <div className="w-full h-24 bg-gray-200 rounded-lg">
+                    </div>
+                </div>
+            }>
+                <TasksBoardWrapper tasks={(tasks ?? []).map(task => ({
+                    ...task,
+                    project: undefined
+                }))} />
+
+
+
+            </Suspense>
+
+
+
+        </div >
     )
 }
 

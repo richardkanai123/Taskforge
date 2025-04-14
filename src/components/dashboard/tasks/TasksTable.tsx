@@ -25,7 +25,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
+    // DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -61,7 +61,7 @@ export const columns: ColumnDef<Task>[] = [
             />
         ),
         enableSorting: false,
-        enableHiding: false,
+        enableHiding: true,
     },
     {
         accessorKey: "title",
@@ -77,6 +77,8 @@ export const columns: ColumnDef<Task>[] = [
             )
         },
         cell: ({ row }) => <div>{row.getValue("title")}</div>,
+        enableSorting: true,
+        enableHiding: false,
     },
     {
         accessorKey: "status",
@@ -132,7 +134,7 @@ export const columns: ColumnDef<Task>[] = [
             )
         },
         enableSorting: true,
-        enableHiding: false,
+        enableHiding: true,
     },
     {
         accessorKey: "priority",
@@ -176,12 +178,12 @@ export const columns: ColumnDef<Task>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
+                        {/* <DropdownMenuItem
                             onClick={() => navigator.clipboard.writeText(task.id)}
                         >
                             Copy task ID
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+                        <DropdownMenuSeparator /> */}
                         <DropdownMenuItem>
                             <Link href={`/dashboard/tasks/${task.id}`}>View Details</Link>
                         </DropdownMenuItem>

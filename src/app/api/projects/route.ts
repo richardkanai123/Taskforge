@@ -48,6 +48,11 @@ export async function POST(request: NextRequest) {
                 leadId: isValidProjectData.data.leadId as string,
                 customerId: isValidProjectData.data.customerId as string,
                 githubRepo: isValidProjectData.data.githubRepo,
+                members: {
+                    connect: {
+                        id: isValidProjectData.data.creatorId
+                    }
+                }
             }, select: {
                 title: true,
                 status: true,
@@ -60,8 +65,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: "Failed to create project" }, { status: 500 });
         }
 
+
          revalidatePath('/dashboard')
-                revalidatePath('/dashboard/projects')
+        revalidatePath('/dashboard/projects')
 
         return NextResponse.json(newProject, { status: 201 });
 
