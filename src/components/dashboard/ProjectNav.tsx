@@ -9,7 +9,7 @@ const ProjectNav = ({ project }: { project: ProjectWithDetails }) => {
     const pathname = usePathname()
     return (
         <SidebarMenuItem key={project.id}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton tooltip={project.title} asChild>
                 <Link
                     href={`/dashboard/projects/${project.id}`}
                     className={`w-full flex items-center gap-3 px-3 py-4 hover:bg-accent rounded-md border-b group ${pathname === `/dashboard/projects/${project.id}` ? 'text-primary bg-sidebar-accent' : ''

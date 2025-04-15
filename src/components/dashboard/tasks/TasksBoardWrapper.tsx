@@ -14,6 +14,7 @@ export function TasksBoardWrapper({ tasks }: { tasks: Task[] }) {
     const handleTaskMove = async (taskId: string, newStatus: string) => {
         const originalTasks = [...optimisticTasks]
         const taskToUpdate = originalTasks.find(t => t.id === taskId)
+        console.log(taskToUpdate)
 
         if (!taskToUpdate) return
 
@@ -50,9 +51,9 @@ export function TasksBoardWrapper({ tasks }: { tasks: Task[] }) {
     }
 
     return (
-        <div className="relative">
+        <div className="relative mx-auto overflow-auto ">
             {isPending && (
-                <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10" />
+                <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-8" />
             )}
             <TasksBoard
                 tasks={optimisticTasks}

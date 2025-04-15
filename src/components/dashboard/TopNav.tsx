@@ -17,7 +17,7 @@ const TopNav = () => {
         <SidebarGroup>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton tooltip={"Dashboard"} asChild>
                         <Link
                             href="/dashboard"
                             className={`w-full flex items-center gap-2 ${pathname === "/dashboard" ? "text-primary" : ""
@@ -29,7 +29,7 @@ const TopNav = () => {
                 </SidebarMenuItem>
 
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton tooltip={"Calendar"} asChild>
                         <Link
                             href="/dashboard/calendar"
                             className={`w-full flex items-center gap-2 ${pathname === "/dashboard/calendar" ? "text-primary" : ""

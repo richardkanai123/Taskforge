@@ -61,7 +61,7 @@ export function TasksBoard({ tasks, onTaskMove, disabled }: TasksBoardProps) {
             onDragOver={disabled ? undefined : handleDragOver}
             onDragEnd={disabled ? undefined : handleDragEnd}
         >
-            <div className="flex gap-4 h-full overflow-x-auto p-4">
+            <div className="flex gap-4 h-full overflow-x-auto ">
                 {TASK_STATUS.map((status) => (
                     <TaskColumn
                         key={status}

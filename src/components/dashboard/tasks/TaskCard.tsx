@@ -42,7 +42,7 @@ export function TaskCard({ task, overlay }: TaskCardProps) {
             <CardContent className="p-3">
                 <div className="flex flex-col gap-2">
                     <div className="text-sm font-medium">{task.title}</div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex justify-around items-center gap-2">
                         <Badge variant="secondary">{task.priority}</Badge>
                         {task.dueDate && (
                             <span className="text-xs text-muted-foreground">

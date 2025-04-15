@@ -1,19 +1,15 @@
-import ProjectsFolderView from "@/components/dashboard/ProjectsFolderView";
+import ProjectsViewContainer from "@/components/dashboard/ProjectsViewContainer";
 import ProjectsViewTab from "@/components/dashboard/ProjectsViewTab";
-import { DataTable } from "@/components/tables/ProjectsTable";
-import { columns } from "@/components/tables/ProjectsTableColumns";
 import { getUserProjects } from "@/lib/actions/get-projects";
 import { SearchParams } from "next/dist/server/request/search-params";
-import { Suspense } from "react";
+
 
 const MainProjectsPage = async ({
     searchParams,
 }: {
     searchParams: SearchParams;
 }) => {
-    const { view } = await searchParams;
-
-    console.log(view);
+    const { view } = searchParams;
     const { projects, message } = await getUserProjects();
 
     if (!projects || projects.length === 0) {
@@ -47,21 +43,10 @@ const MainProjectsPage = async ({
                 </div>
 
                 <div className="self-end ml-auto">
-                    <ProjectsViewTab view={view as string} />
+                    <ProjectsViewTab view={view as string || "folders"} />
                 </div>
             </div>
-            {view === "table" ? (
-                <Suspense fallback={<div>Loading...</div>}>
-                    <DataTable
-                        data={projects.map((p) => ({ ...p, progress: p.progress ?? 0 }))}
-                        columns={columns}
-                    />
-                </Suspense>
-            ) : (
-                <Suspense fallback={<div>Loading...</div>}>
-                    <ProjectsFolderView projects={projects} />
-                </Suspense>
-            )}
+            <ProjectsViewContainer view={view as string || "folders"} projects={projects} />
         </div>
     );
 };

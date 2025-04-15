@@ -4,7 +4,11 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { getUserProjects } from "@/lib/actions/get-projects"
 import { Suspense } from "react"
@@ -15,7 +19,15 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
 
   return (
     <Sidebar className="pt-[70px] bg-background/75" collapsible="icon" {...props}>
+
       <SidebarContent className="overflow-y-auto bg-background/75">
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem >
+              <SidebarTrigger className="self-end" />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
         <Suspense fallback={<SidebarSkeleton />}>
           <NavMain Projects={projects} message={status !== 200 ? message : 'success'} />
         </Suspense>

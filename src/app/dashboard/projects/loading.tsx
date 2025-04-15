@@ -1,4 +1,4 @@
-export default function DashboardLoading() {
+export default function Loading() {
     return (
         <div className="flex flex-col w-full h-full p-4 space-y-4 max-w-screen-xl mx-auto">
             {/* Header loading */}
@@ -52,5 +52,5 @@ export default function DashboardLoading() {
                 ))}
             </div>
         </div>
-    )
+    );
 }

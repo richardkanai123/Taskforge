@@ -37,7 +37,7 @@ const Projectsnav = ({ Projects, message }: { Projects: ProjectWithDetails[] | n
             </div>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton tooltip={"Your Projects"} asChild>
                         <Link className={` mb-3 ${pathname === '/dashboard/projects' ? 'text-primary' : ''}`} href="/dashboard/projects">
                             <ListTodo className="h-4 w-4 text-muted-foreground group-hover:text-primary flex-shrink-0" />
                             <span>Your Projects</span>
