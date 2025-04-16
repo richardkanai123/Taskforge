@@ -2,13 +2,21 @@
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Label } from '@/components/ui/label'
 import { Task } from '@prisma/client'
+import { format, differenceInDays } from 'date-fns'
+import Link from 'next/link'
 
 export function TaskSheet({ task }: {
     task: Task,
 }) {
+    const daysToDeadline = differenceInDays(new Date(task.dueDate), new Date())
+    const deadlineText = daysToDeadline > 0
+        ? `${daysToDeadline} days remaining`
+        : daysToDeadline === 0
+            ? 'Due today'
+            : `${Math.abs(daysToDeadline)} days overdue`
+
     return (
         <SheetContent className="w-[400px]">
             <SheetHeader>
@@ -18,19 +26,22 @@ export function TaskSheet({ task }: {
                         {task.status}
                     </Badge>
                 </SheetTitle>
+                <p className={`text-sm ${daysToDeadline < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                    {deadlineText}
+                </p>
             </SheetHeader>
             <div className="w-full mt-6 space-y-6">
                 <div className="space-y-2">
                     <Label>Description</Label>
-                    <div dangerouslySetInnerHTML={{ __html: task.description }} className="mx-auto w-full"></div>
+                    <div dangerouslySetInnerHTML={{ __html: task.description }} className="mx-auto w-full prose prose-sm max-w-none"></div>
                 </div>
-                <div className="w-full space-y-2">
-                    <Label>Due Date</Label>
-                    <Calendar selected={new Date(task.dueDate)} initialFocus={true} mode="single" />
+                <div className="text-sm text-muted-foreground">
+                    Due: {format(new Date(task.dueDate), 'PPP')}
                 </div>
                 <div className="flex gap-2">
-                    <Button className="flex-1">Save Changes</Button>
-                    <Button variant="destructive">Delete Task</Button>
+                    <Button asChild className="flex-1">
+                        <Link href={`/dashboard/tasks/${task.id}`}>View Task</Link>
+                    </Button>
                 </div>
             </div>
         </SheetContent>
